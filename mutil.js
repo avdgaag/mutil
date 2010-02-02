@@ -155,48 +155,6 @@ String.prototype.trim = function() {
 	return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 };
 
-/*
- * Substitute arguments into a format string. The format string has numeric
- * placeholders for the arguments passed in.
- * 
- * Usage:
- * 
- *   "First: %1, Third: %3, Second: %2".format(1, 2, 3);
- * 
- * Produces:
- * 
- *   "First: 1, Third: 3, Second: 2"
- * 
- */
-String.prototype.format = function() {
-	return arguments.inject(this, function(string, i) {
-		var r = new RegExp('%' + (i-1), 'g'); 
-		return string.replace(re, this); 
-	});
-};
-
-/*
- * Run a loop this number of times.
- * 
- * Usage:
- * 
- *   3.times(function(i) {
- *     document.write(i);
- *   });
- * 
- * Produces:
- * 
- *   1
- *   2
- *   3
- *
- */
-Number.prototype.times = function(callback) {
-	for(var i = 0; i < this; i++) {
-		callback(i);
-	}
-};
-
 (function() {
 
 	/*
