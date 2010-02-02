@@ -1,6 +1,17 @@
-/*
+/**
+ * @fileoverview the mutil.js tiny javascript library.
+ * 
+ * @author Arjan van der Gaag
+ * @version 0.1
+ */
+
+/**
  * Create function bindings, executing a function in the scope
  * of another object.
+ * 
+ * @param {Object} scope is the object that sets the scope for this function.
+ * @returns a new function in the given scope.
+ * @type Function
  */
 Function.prototype.bind = function(scope) {
 	var _function = this;
@@ -9,14 +20,19 @@ Function.prototype.bind = function(scope) {
 	};
 };
 
-/*
- * The enumerable mix in provides helper functions for working with arrays.
- * It is mixed into the array prototype and is applied to all element
+/**
+ * Empty constructor, since this is a mix-in module and not a real class.
+ * @class The enumerable mix in provides helper functions for working with
+ * arrays. It is mixed into the array prototype and is applied to all element
  * collections.
+ * 
+ * @constructor
+ * @author Arjan van der Gaag
+ * @version 0.1
  */
-var Enumerable = function() {};
+function Enumerable() {};
 Enumerable.prototype = {
-	/*
+	/**
 	 * Loop over the elements in an array, yielding each to the callback. The
 	 * callback receives as arguments the index of iteration and the entire array.
 	 * 
@@ -32,6 +48,9 @@ Enumerable.prototype = {
 	 *   two
 	 *   three
 	 * 
+	 * @param {Function} callback is the function to call for every element.
+	 * @returns itself
+	 * @type Array
 	 */
 	each: function(callback) {
 	    for(var i = 0, j = this.length; i < j; i++) {
@@ -40,7 +59,7 @@ Enumerable.prototype = {
 		return this;
 	},
 
-	/*
+	/**
 	 * Reduce an array to a single value with a callback.
 	 * 
 	 * Usage:
@@ -53,6 +72,9 @@ Enumerable.prototype = {
 	 * 
 	 *   6
 	 *
+	 * @param init the starting value
+	 * @param {Function} callback is the function to call for every element.
+	 * @returns the cumulative result value
 	 */
 	inject: function(init, callback) {
 		this.each(function(i, arr) {
@@ -61,7 +83,7 @@ Enumerable.prototype = {
 		return init;
 	},
 
-	/*
+	/**
 	 * Create a new array containing those elements from the original array for
 	 * which the callback return value evaluates to true.
 	 * 
@@ -75,6 +97,9 @@ Enumerable.prototype = {
 	 * 
 	 *   [3, 4]
 	 * 
+	 * @param {Function} callback to determine to select an element or not
+	 * @returns a new array with only the selected elements
+	 * @type Array
 	 */
 	select: function(callback) {
 		return this.inject([], function(memo, i, arr) {
@@ -83,7 +108,7 @@ Enumerable.prototype = {
 		});
 	},
 
-	/*
+	/**
 	 * Returns if the array has any elements. If the optional callback is given,
 	 * it will return the count of elements that evaluate to true for the
 	 * callback.
@@ -106,6 +131,9 @@ Enumerable.prototype = {
 	 *   true
 	 *   false
 	 * 
+	 * @param {Function} callback to select which elements to count (optional)
+	 * @returns whether there are any elements
+	 * @type Bool
 	 */
 	any: function(callback) {
 		if(typeof callback == 'function') {
@@ -115,7 +143,7 @@ Enumerable.prototype = {
 		}
 	},
 
-	/*
+	/**
 	 * Apply a callback function to every element in the array.
 	 * 
 	 * Usage:
@@ -128,6 +156,9 @@ Enumerable.prototype = {
 	 * 
 	 *   [2,4,6];
 	 * 
+	 * @param {Function} callback to apply to every element
+	 * @returns a new array with callback applied to every element
+	 * @type Array
 	 */
 	map: function(callback) {
 		return this.inject([], function(memo, i, arr) {
@@ -140,7 +171,7 @@ for(method in Enumerable.prototype) {
 }
 
 
-/*
+/**
  * Remove leading and trailing whitespace.
  * 
  * Usage:
@@ -150,6 +181,9 @@ for(method in Enumerable.prototype) {
  * Produces:
  * 
  *   "my string"
+ * 
+ * @returns itself with leading and trailing whitespace removed
+ * @type String
  */
 String.prototype.trim = function() {
 	return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
@@ -157,7 +191,7 @@ String.prototype.trim = function() {
 
 (function() {
 
-	/*
+	/**
 	 * Select DOM elements by using a really simple CSS selector syntax.
 	 * 
 	 * Supported selectors:
