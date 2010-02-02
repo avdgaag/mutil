@@ -222,8 +222,20 @@ Number.prototype.times = function(callback) {
 	 * 
 	 *   [p.test, p.test]
 	 * 
+	 * In addition you can pass in a function as an argument and have it fire
+	 * when the onLoad-event fires.
+	 * 
+	 * Usage:
+	 * 
+	 *   $(function() {
+	 *     $('p').addEvent(...);
+	 *   });
+	 * 
 	 */
 	function _$(arg, root) {
+		/*
+		 * Select DOM elements helper function.
+		 */
 		var find = function(arg, root) {
 			
 			// Helper method to convert a nodelist to an array
@@ -283,6 +295,10 @@ Number.prototype.times = function(callback) {
 			// Select by tagname: return array of elements
 			return this.nodelistToArray(root.getElementsByTagName(arg));
 		};
+		
+		/*
+		 * Register a load event function helper function.
+		 */
 		var addLoadEvent = function(func) {
 			var oldonload = window.onload;
 			if (typeof window.onload != 'function') {
@@ -304,6 +320,8 @@ Number.prototype.times = function(callback) {
 	_$.prototype = {
 		/*
 		 * Import Enumerable functions
+		 * 
+		 * TODO: clean this up somehow.
 		 */
 		each:   function() { return Enumerable.prototype.each  .apply(this.elements, arguments); },
 		inject: function() { return Enumerable.prototype.inject.apply(this.elements, arguments); },
