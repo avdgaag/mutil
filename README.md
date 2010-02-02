@@ -1,6 +1,6 @@
-== μTil, a tiny Javascript library
+## μtil, a tiny Javascript library
 
-μTil (mutil) is a tiny Javascript utility library that looks a lot like jQuery but is much smaller. It has a simple selector engine, some basic event methods and a simple plugin architecture to easily add functions to its core.
+μtil (mutil) is a tiny Javascript utility library that looks a lot like jQuery but is much smaller. It has a simple selector engine, some basic event methods and a simple plugin architecture to easily add functions to its core.
 
 Here's some demo code:
 
