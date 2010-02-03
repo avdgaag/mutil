@@ -1,5 +1,6 @@
 /**
- * @fileoverview the mutil.js tiny javascript library.
+ * @fileoverview the mutil.js tiny javascript library. More documentation
+ * coming soon!
  * 
  * @author Arjan van der Gaag
  * @version 0.1
