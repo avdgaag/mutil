@@ -90,7 +90,7 @@
  * create topic branches for your features.</p>
  * 
  * @author <a href="http://arjanvandergaag.nl">Arjan van der Gaag</a>
- * @version 0.1
+ * @version 0.2
  */
 
 /**
