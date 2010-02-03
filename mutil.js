@@ -94,21 +94,6 @@
  */
 
 /**
- * Create function bindings, executing a function in the scope
- * of another object.
- * 
- * @param {Object} scope is the object that sets the scope for this function.
- * @returns a new function in the given scope.
- * @type Function
- */
-Function.prototype.bind = function(scope) {
-	var _function = this;
-	return function() {
-		return _function.apply(scope, arguments);
-	};
-};
-
-/**
  * Empty constructor, since this is a mix-in module and not a real class.
  * @class The enumerable mix in provides helper functions for working with
  * arrays. It is mixed into the array prototype and is applied to all element
