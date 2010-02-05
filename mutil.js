@@ -224,9 +224,9 @@ Enumerable.prototype = {
 	 */
 	any: function(callback) {
 		if(typeof callback == 'function') {
-			return count(this.select(callback)) > 0;
+			return this.select(callback).length > 0;
 		} else {
-			return count(this) > 0;
+			return this.length > 0;
 		}
 	},
 
