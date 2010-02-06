@@ -3,7 +3,7 @@ process.mixin(require('sys'))
 require.paths.unshift('spec', '/usr/local/lib/ruby/gems/1.8/gems/jspec-3.2.1/lib', 'lib')
 require('jspec')
 require('unit/spec.helper')
-require('yourlib')
+require('mutil')
 
 quit = process.exit
 print = puts
