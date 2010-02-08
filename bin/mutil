@@ -199,8 +199,9 @@ def jsmin
 end
 
 # find all plugins and concatenate one big file
-lib = File.read('mutil.js')
-ARGV.each { |filename| lib << File.read('mutil.' + filename + '.js') }
+relpath = File.join(File.dirname(__FILE__), *%w{.. lib})
+lib = File.read(File.join(relpath, 'mutil.js'))
+ARGV.each { |filename| lib << File.read(File.join(relpath, 'plugins', 'mutil.' + filename + '.js')) }
 
 # Generate the minified output
 require 'stringio'
@@ -212,4 +213,4 @@ jsmin
 $stdout = STDOUT
 puts "Concatenated and minified mutil core, #{ARGV.join(', ')}"
 File.open('mutil.min.js', 'w') { |f| f.write output.string }
-puts "Results written to mutil.min.js"
+puts "Results written to mutil.min.js (~#{File.size('mutil.min.js')/1024}Kb)"
