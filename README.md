@@ -60,15 +60,19 @@ print dialog when clicked upon:
 This is still very much a work in progress. Here's whats on my
 todo-list:
 
-* Create a test suite
+* Add tests for plugins
+* Extract all prototype methods (classes, events) currently in core
+  into plugins
+* Remove potential memory leakage by moving selector engine into
+  own function, rather than inner function in constructor.
 * Add some more useful plugins
-* simplify and shorten the code
+* simplify and shorten the code a bit
 
 Here's what I don't want to:
 
 * AJAX
 * Advanced selectors
-* Complete DOM traversal
+* Complete DOM traversal and manipulation
 
 When you're in need of that stuff, you're probably better off using
 prototype or jQuery or some other major framework.
@@ -80,10 +84,10 @@ create topic branches for your features.
 
 * **Author**: Arjan van der Gaag
 * **E-mail**: arjan@arjanvandergaag.nl
-* **URL**: http://arjanvandergaag.nl
-* **Source code**: http://github.com/avdgaag/mutil
-* **Documentation**: http://avdgaag.github.com/mutil
-* **Issue tracker**: http://github.com/avdgaag/mutil/issues
+* **URL**: [http://arjanvandergaag.nl](http://arjanvandergaag.nl)
+* **Source code**: [http://github.com/avdgaag/mutil](http://github.com/avdgaag/mutil)
+* **Documentation**: [http://avdgaag.github.com/mutil](http://avdgaag.github.com/mutil)
+* **Issue tracker**: [http://github.com/avdgaag/mutil/issues](http://github.com/avdgaag/mutil/issues)
 
 ## License
 
