@@ -1,3 +1,9 @@
+describe 'String'
+  it 'should remove leading and trailing whitespace with #trim'
+    " a \n 	".trim().should.equal 'a'
+  end
+end
+
 describe 'Array'
   describe 'with some elements'
     before
@@ -24,6 +30,41 @@ describe 'Array'
 		  s.should.be_empty
 			s.should.be_an Array
 		end
+		
+		it 'should accumulate elements with #inject'
+		  var x = arr.inject('now: ', function(memo) {
+				return memo + this
+			})
+			x.should.equal 'now: abcd'
+		end
+		
+		it 'should return all element but a few'
+		  arr.except('a').should.have_length 3
+		  arr.except('a', 'b').should.have_length 2
+		  arr.except(['a', 'b']).should.have_length 2
+		end
+		
+		it 'should return true for #any'
+		  arr.any().should.be_true
+		end
+		
+		it 'should return for #any with a condition'
+		  arr.any(function() { return this == 'a' }).should.be_true
+			arr.any(function() { return this == 0   }).should.be_false
+		end
+		
+		it 'should return a boolean for #all'
+		  arr.all(function() { return this.length == 1 }).should.be_true
+			arr.all(function() { return this == 'a' }).should.be_false
+		end
+
+		it 'should map all elements using #collect'
+		  var x = arr.collect(function() { return '--' + this })
+			x[0].should.equal '--a'
+			x[1].should.equal '--b'
+			x[2].should.equal '--c'
+			x[3].should.equal '--d'
+		end
   end
 
   describe 'with no elements'
@@ -45,6 +86,30 @@ describe 'Array'
 		  })
 		  s.should.be_empty
 			s.should.be_an Array
+		end
+		
+		it 'should return the initial value with #inject'
+		  var x = arr.inject('now: ', function(memo) {
+				return memo + this
+			})
+			x.should.equal 'now: '
+		end
+		
+		it 'should return itself when using #except'
+		  arr.except(1, 2).should.be_empty
+		end
+		
+		it 'should return false for #any'
+		  arr.any().should.be_false
+		  arr.any(function() { return this > 0 }).should.be_false
+		end
+		
+		it 'should return false for #all'
+		  arr.all(function() { return this < 0; }).should.be_false
+		end
+		
+		it 'should return itself for #map'
+		  arr.map(function() { return true }).should.be_empty
 		end
   end
 end
