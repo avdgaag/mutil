@@ -50,6 +50,23 @@ describe 'Array'
 end
 
 describe 'Mutil'
+	describe 'handling functions'
+		before
+			fn = function() { return 2 + 2; };
+		end
+		
+	  it 'should not return anything'
+	    $(fn).elements.should.be_undefined
+	  end
+	
+		it 'should change the window onload function'
+			x = window.onload
+			window.onload.should.equal x
+		  $(fn)
+			window.onload.should_not.equal x
+		end
+	end
+	
   describe 'selecting'
 	  describe 'by element name'
       it 'should find an element'
@@ -61,17 +78,39 @@ describe 'Mutil'
 				$('foo').elements.should.be_empty
 			end
     end
-		describe 'by tagname'
+		describe 'by classname'
 			it 'should find by tag'
 				$('p.foo').should.have_nodes 1
 			end
 			
-			it 'should find by tag in multiple class names'
+			it 'should find by class in multiple class names'
 				$('p.bar').should.have_nodes 2
+			end
+			
+			it 'should find only elements with all class names'
+			  $('p.foo.bar').should.have_nodes 1
 			end
 
 			it 'should return an empty array when nothing is found'
 			  $('p.foobar').elements.should.be_empty
+			end
+		end
+		
+		describe 'by using native objects'
+		  it 'should return an array of nodes'
+		    $(document.getElementsByTagName('p')).should.have_nodes 3
+		  end
+		
+			it 'should return an empty array for an empty nodelist'
+	    	$(document.getElementsByTagName('foo')).elements.should.be_empty
+			end
+			
+			it 'should collect a single element'
+	    	$(document.getElementsByTagName('p')[0]).should.have_nodes 1
+			end
+
+			it 'should not collect other objects'
+	    	-{ $(5) }.should.throw_error
 			end
 		end
 		
@@ -87,11 +126,15 @@ describe 'Mutil'
 		
 		describe 'by descendant'
 			it 'should find one element in another'
-			  $('div p').should.have_nodes 1
+			  $('blockquote p').should.have_nodes 1
 			end
 			
 			it 'should find multiple elements in another'
 			  $('div div').should.have_nodes 1
+			end
+			
+			it 'should find all elements in another'
+			  $('div p').should.have_nodes 3
 			end
 			
 			it 'should return an empty array when nothing is found'
