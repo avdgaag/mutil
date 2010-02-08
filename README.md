@@ -61,10 +61,6 @@ This is still very much a work in progress. Here's whats on my
 todo-list:
 
 * Add tests for plugins
-* Extract all prototype methods (classes, events) currently in core
-  into plugins
-* Remove potential memory leakage by moving selector engine into
-  own function, rather than inner function in constructor.
 * Add some more useful plugins
 * simplify and shorten the code a bit
 
