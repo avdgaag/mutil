@@ -139,7 +139,7 @@
                 Mutil.App(function(app, $) {
                     var x = $('p'),
                         i = 0;
-                    x.each(function() {
+                    x.forEach(function() {
                         i++;
                     });
                     assertEqual(3, i);
@@ -150,7 +150,7 @@
                 Mutil.App(function(app, $) {
                     var x = $('p'),
                         i = 0;
-                    app.Collection.prototype.incrementer = function() { this.each(function() { i++; }); };
+                    app.Collection.prototype.incrementer = function() { this.forEach(function() { i++; }); };
                     x.incrementer();
                     assertEqual(3, i);
                 });
