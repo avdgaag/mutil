@@ -17,30 +17,30 @@
                 window.onload = null;
             }
 
-            // function testSelectingElements() {
-            //     Mutil.App(function(app, $) {
-            //         assertSelectedNodes(3, $('p'));
-            //     });
-            // }
-            // 
-            // function testSelectingClasses() {
-            //     Mutil.App(function(app, $) {
-            //         assertSelectedNodes(3, $('.foo'));
-            //         assertSelectedNodes(2, $('a.foo'));
-            //     });
-            // }
-            // 
-            // function testSelectingIds() {
-            //     Mutil.App(function(app, $) {
-            //         assertSelectedNodes(1, $('#page'));
-            //     });
-            // }
-            // 
-            // function testSelectingMultiple() {
-            //     Mutil.App(function(app, $) {
-            //         assertSelectedNodes(4, $('div, p'));
-            //     });
-            // }
+            function testSelectingElements() {
+                Mutil.App(function(app, $) {
+                    assertSelectedNodes(3, $('p'));
+                });
+            }
+            
+            function testSelectingClasses() {
+                Mutil.App(function(app, $) {
+                    assertSelectedNodes(3, $('.foo'));
+                    assertSelectedNodes(2, $('a.foo'));
+                });
+            }
+            
+            function testSelectingIds() {
+                Mutil.App(function(app, $) {
+                    assertSelectedNodes(1, $('#page'));
+                });
+            }
+            
+            function testSelectingMultiple() {
+                Mutil.App(function(app, $) {
+                    assertSelectedNodes(4, $('div, p'));
+                });
+            }
 
             function testSelectingChildren() {
                 Mutil.App(function(app, $) {
@@ -49,127 +49,127 @@
                 });
             }
 
-            // function testSelectingDirectDescendents() {
-            //     Mutil.App(function(app, $) {
-            //         assertSelectedNodes(2, $('div > p'));
-            //         assertSelectedNodes(1, $('div > ul > li > p'));
-            //     });
-            // }
-            // 
-            // function testSelectingAdjacent() {
-            //     Mutil.App(function(app, $) {
-            //         assertSelectedNodes(1, $('p + p'));
-            //         assertSelectedNodes(4, $('li + li'));
-            //         assertSelectedNodes(1, $('p + p + ul'));
-            //     });
-            // }
-            // 
-            // function testQueryFromCollection() {
-            //     Mutil.App(function(app, $) {
-            //         assertSelectedNodes(3, $('div').query('p'));
-            //     });
-            // }
-            // 
-            // function testSelectingByAttribute() {
-            //     Mutil.App(function(app, $) {
-            //         assertSelectedNodes(2, $('a[href=foo]'));
-            //         assertSelectedNodes(2, $('a[href=\'foo\']'));
-            //         assertSelectedNodes(2, $('a[href="foo"]'));
-            //         assertSelectedNodes(1, $('a[href=foo][title="a b c"]'));
-            //         assertSelectedNodes(2, $('a[title*=b]'));
-            //         assertSelectedNodes(0, $('a[title*=e]'));
-            //         assertSelectedNodes(1, $('a[title~=tag2]'));
-            //         assertSelectedNodes(1, $('a[title^=tag1]'));
-            //         assertSelectedNodes(0, $('a[title^=tag2]'));
-            //         assertSelectedNodes(0, $('a[title$=tag1]'));
-            //         assertSelectedNodes(1, $('a[title$=tag2]'));
-            //         assertSelectedNodes(1, $('a[href=foo][title^=b]'));
-            //         assertSelectedNodes(0, $('a[href=foo][title^=c]'));
-            //     });
-            // }
-            // 
-            // function testSelectingInAnElement() {
-            //     Mutil.App(function(app, $) {
-            //         assertSelectedNodes(3, $('p', document));
-            //         assertSelectedNodes(1, $('p', document.getElementsByTagName('ul')[0]));
-            //         assertSelectedNodes(0, $('p', document.getElementsByTagName('pre')[0]));
-            //     });
-            // }
-            // 
-            // function testSelectingNothing() {
-            //     Mutil.App(function(app, $) {
-            //         var arr = ['', null, false, 2, {}];
-            //         for(var i = 0, j = arr.length; i--;) {
-            //             assertException(function() {
-            //                 $(arr[i]);
-            //             });
-            //         }
-            //     });
-            // }
-            // 
-            // function testAddingOnloadFunction() {
-            //     var pig = false;
-            //     var fn = function() { pig = true; };
-            //     assertNull(window.onload);
-            //     Mutil.App(function(app, $) {
-            //         $(fn);
-            //     });
-            //     assertNotNull(window.onload);
-            //     window.onload();
-            //     assertTrue(pig);
-            // }
-            // 
-            // function testAddingMultipleOnloadFunctions() {
-            //     var pig1 = false,
-            //         pig2 = false;
-            //     var fn1 = function() { pig1 = true; };
-            //     var fn2 = function() { pig2 = true; };
-            //     assertNull(window.onload);
-            //     Mutil.App(function(app, $) {
-            //         $(fn1);
-            //         $(fn2);
-            //     });
-            //     assertNotNull(window.onload);
-            //     window.onload();
-            //     assertTrue(pig1);
-            //     assertTrue(pig2);
-            // }
-            // 
-            // function testCollectionFunctionsShouldApplyToEachElement() {
-            //     Mutil.App(function(app, $) {
-            //         var x = $('p'),
-            //             i = 0;
-            //         x.each(function() {
-            //             i++;
-            //         });
-            //         assertEqual(3, i);
-            //     });
-            // }
-            // 
-            // function testAddingElementsToCollectionPrototypeShouldApplyToEachElement() {
-            //     Mutil.App(function(app, $) {
-            //         var x = $('p'),
-            //             i = 0;
-            //         app.Collection.prototype.incrementer = function() { this.each(function() { i++; }); };
-            //         x.incrementer();
-            //         assertEqual(3, i);
-            //     });
-            // }
-            // 
-            // function testShouldTellTtype() {
-            //     var fn   = function() {},
-            //         str  = "foo bar",
-            //         num  = 12,
-            //         bool = true,
-            //         el   = document.getElementById('page'),
-            //         arr  = [];
-            //     assertTrue(fn.isFunction(),  'Does not recognize function');
-            //     assertTrue(str.isString(),   'Does not recognize string');
-            //     assertTrue(num.isNumber(),   'Does not recognize number');
-            //     assertTrue(bool.isBoolean(), 'Does not recognize boolean');
-            //     assertTrue(el.isElement(),   'Does not recognize element');
-            //     assertTrue(arr.isArray(),    'Does not recognize array');
-            // }
+            function testSelectingDirectDescendents() {
+                Mutil.App(function(app, $) {
+                    assertSelectedNodes(2, $('div > p'));
+                    assertSelectedNodes(1, $('div > ul > li > p'));
+                });
+            }
+            
+            function testSelectingAdjacent() {
+                Mutil.App(function(app, $) {
+                    assertSelectedNodes(1, $('p + p'));
+                    assertSelectedNodes(4, $('li + li'));
+                    assertSelectedNodes(1, $('p + p + ul'));
+                });
+            }
+            
+            function testQueryFromCollection() {
+                Mutil.App(function(app, $) {
+                    assertSelectedNodes(3, $('div').query('p'));
+                });
+            }
+            
+            function testSelectingByAttribute() {
+                Mutil.App(function(app, $) {
+                    assertSelectedNodes(2, $('a[href=foo]'));
+                    assertSelectedNodes(2, $('a[href=\'foo\']'));
+                    assertSelectedNodes(2, $('a[href="foo"]'));
+                    assertSelectedNodes(1, $('a[href=foo][title="a b c"]'));
+                    assertSelectedNodes(2, $('a[title*=b]'));
+                    assertSelectedNodes(0, $('a[title*=e]'));
+                    assertSelectedNodes(1, $('a[title~=tag2]'));
+                    assertSelectedNodes(1, $('a[title^=tag1]'));
+                    assertSelectedNodes(0, $('a[title^=tag2]'));
+                    assertSelectedNodes(0, $('a[title$=tag1]'));
+                    assertSelectedNodes(1, $('a[title$=tag2]'));
+                    assertSelectedNodes(1, $('a[href=foo][title^=b]'));
+                    assertSelectedNodes(0, $('a[href=foo][title^=c]'));
+                });
+            }
+            
+            function testSelectingInAnElement() {
+                Mutil.App(function(app, $) {
+                    assertSelectedNodes(3, $('p', document));
+                    assertSelectedNodes(1, $('p', document.getElementsByTagName('ul')[0]));
+                    assertSelectedNodes(0, $('p', document.getElementsByTagName('pre')[0]));
+                });
+            }
+            
+            function testSelectingNothing() {
+                Mutil.App(function(app, $) {
+                    var arr = ['', null, false, 2, {}];
+                    for(var i = 0, j = arr.length; i--;) {
+                        assertException(function() {
+                            $(arr[i]);
+                        });
+                    }
+                });
+            }
+            
+            function testAddingOnloadFunction() {
+                var pig = false;
+                var fn = function() { pig = true; };
+                assertNull(window.onload);
+                Mutil.App(function(app, $) {
+                    $(fn);
+                });
+                assertNotNull(window.onload);
+                window.onload();
+                assertTrue(pig);
+            }
+            
+            function testAddingMultipleOnloadFunctions() {
+                var pig1 = false,
+                    pig2 = false;
+                var fn1 = function() { pig1 = true; };
+                var fn2 = function() { pig2 = true; };
+                assertNull(window.onload);
+                Mutil.App(function(app, $) {
+                    $(fn1);
+                    $(fn2);
+                });
+                assertNotNull(window.onload);
+                window.onload();
+                assertTrue(pig1);
+                assertTrue(pig2);
+            }
+            
+            function testCollectionFunctionsShouldApplyToEachElement() {
+                Mutil.App(function(app, $) {
+                    var x = $('p'),
+                        i = 0;
+                    x.each(function() {
+                        i++;
+                    });
+                    assertEqual(3, i);
+                });
+            }
+            
+            function testAddingElementsToCollectionPrototypeShouldApplyToEachElement() {
+                Mutil.App(function(app, $) {
+                    var x = $('p'),
+                        i = 0;
+                    app.Collection.prototype.incrementer = function() { this.each(function() { i++; }); };
+                    x.incrementer();
+                    assertEqual(3, i);
+                });
+            }
+            
+            function testShouldTellTtype() {
+                var fn   = function() {},
+                    str  = "foo bar",
+                    num  = 12,
+                    bool = true,
+                    el   = document.getElementById('page'),
+                    arr  = [];
+                assertTrue(fn.isFunction(),  'Does not recognize function');
+                assertTrue(str.isString(),   'Does not recognize string');
+                assertTrue(num.isNumber(),   'Does not recognize number');
+                assertTrue(bool.isBoolean(), 'Does not recognize boolean');
+                assertTrue(el.isElement(),   'Does not recognize element');
+                assertTrue(arr.isArray(),    'Does not recognize array');
+            }
 
         }
         </script>
