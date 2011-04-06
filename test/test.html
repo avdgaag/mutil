@@ -170,6 +170,87 @@
                 assertTrue(el.isElement(),   'Does not recognize element');
                 assertTrue(arr.isArray(),    'Does not recognize array');
             }
+            
+            function __click(el) {
+                var ev = document.createEvent('MouseEvents');
+                ev.initMouseEvent('click', true, true, document.defaultView, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
+                el.dispatchEvent(ev);
+            }
+            
+            function testBindingEvents() {
+                Mutil.App(function(app, $) {
+                    var flag = false,
+                        el = document.getElementsByTagName('p')[0];
+                    app.bind(el, 'click', function(e) {
+                        flag = true;
+                    });
+                    __click(el);
+                    assertTrue(flag);
+                });
+            }
+            
+            function testUnbindingEvents() {
+                Mutil.App(function(app, $) {
+                    var flag = false,
+                        el = document.getElementsByTagName('p')[0],
+                        fn = function(e) { flag = true; };
+                    app.bind(el, 'click', fn);
+                    __click(el);
+                    assertTrue(flag);
+                    flag = false;
+                    app.unbind(el, 'click', fn);
+                    __click(el);
+                    assertFalse(flag);
+                });
+            }
+            
+            function testDelegatedBindingOfEvents() {
+                Mutil.App(function(app, $) {
+                    var i = 0,
+                        el = document.getElementById('page'),
+                        fn = function(e) { i += 1; },
+                        els = document.getElementsByTagName('p');
+                    app.bindDelegator(el, 'p', 'click', fn);
+                    for(var j = 0; j < els.length; j++) {
+                        __click(els[j]);
+                    }
+                    assertEqual(3, i);
+                });
+            }
+            
+            function testBindEventsToCollection() {
+                Mutil.App(function(app, $) {
+                    var i = 0,
+                        els = document.getElementsByTagName('p'),
+                        fn = function() { i++; },
+                        coll = $('p');
+                    coll.bind('click', fn);
+                    for(var j = 0; j < els.length; j++) {
+                        __click(els[j]);
+                    }
+                    assertEqual(3, i);
+                    coll.unbind('click', fn);
+                });
+            }
+            
+            function testUnbindEventsFromCollection() {
+                Mutil.App(function(app, $) {
+                    var i = 0,
+                        els = document.getElementsByTagName('p'),
+                        fn = function() { i++; },
+                        coll = $('p');
+                    coll.bind('click', fn);
+                    for(var j = 0; j < els.length; j++) {
+                        __click(els[j]);
+                    }
+                    assertEqual(3, i);
+                    coll.unbind('click', fn);
+                    for(var j = 0; j < els.length; j++) {
+                        __click(els[j]);
+                    }
+                    assertEqual(3, i);
+                });
+            }
 
         }
         </script>
