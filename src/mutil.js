@@ -233,7 +233,7 @@
         addEvent: function(node, type, fn) {
             if(node.attachEvent) {
                 node['e' + type + fn] = fn;
-                node[type + fn] = function() { this['e' + type + fn](window.event) }
+                node[type + fn] = function() { node['e' + type + fn](window.event) }
                 node.attachEvent('on' + type, node[type + fn]);
             } else {
                 node.addEventListener(type, fn, false);
