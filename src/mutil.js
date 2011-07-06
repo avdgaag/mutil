@@ -168,7 +168,7 @@
             // **tag names**: if all else fails, we simply query by tag name
             // for the selector string.
             } else {
-                return slice.call(scope.getElementsByTagName(q));
+                return this.toArray(scope.getElementsByTagName(q));
             }
         },
 
@@ -329,7 +329,7 @@
         //     // => ['oo', 'ar']
         //
         invoke: function(obj, name) {
-            var args = slice.call(arguments, 2);
+            var args = this.toArray(arguments).slice(2);
             return this.map(obj, function(el) {
                 return el[name].apply(el, args);
             });
@@ -435,7 +435,7 @@
         //     // => { foo: 'baz', baz: 'qux' }
         //
         extend: function(host) {
-            var others = slice.call(arguments, 1),
+            var others = this.toArray(arguments, 1),
                 that   = this;
             this.forEach(others, function(other) {
                 that.forEach(other, function(k, v) {
@@ -459,9 +459,10 @@
         //     foo.call({ bar: 'baz' }) // => 'qux'
         //
         bind: function(fn, context) {
-            var args = slice.call(arguments, 2);
+            var that = this,
+                args = this.toArray(arguments).slice(2);
             return function() {
-                return fn.apply(context, args.concat(slice.call(arguments)));
+                return fn.apply(context, args.concat(that.toArray(arguments)));
             };
         },
 
@@ -499,7 +500,17 @@
         },
 
         toArray: function(obj) {
-            return slice.call(obj);
+            if(this.isArray(obj)) {
+                return obj;
+            } else if(obj.toArray) {
+                return obj.toArray();
+            } else if(obj && obj.hasOwnProperty('calllee')) {
+                return slice.call(obj);
+            } else {
+                var arr = [];
+                for(var i = obj.length; i--; arr.unshift(obj[i]));
+                return arr;
+            }
         },
 
         // ## Mixins
