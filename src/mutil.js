@@ -34,7 +34,7 @@
 
         // Current version number, using [semantic
         // versioning](http://semver.org).
-        VERSION: '0.1.0',
+        VERSION: '0.1.1',
 
         // ### Extending native functions
         //
