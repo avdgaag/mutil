@@ -98,6 +98,8 @@
             }
         },
 
+        // ## DOM helper methods
+
         // ### Mini DOM selector engine
         //
         // Very simple selection of DOM elements, supporting the following
@@ -169,7 +171,40 @@
             }
         },
 
-        // ## Event handling
+        // ### Classes
+        //
+        // Adding and removing classes to/from DOM elements isn't too hard, but it
+        // occurs often enough to warrant their own helper methods.
+        //
+        // You can call the `addClass` and `removeClass` functions with one or more
+        // classes to add or remove all of them. No duplicates will be added, and
+        // when removing, no duplicates will remain (although other duplicates will
+        // be ignored).
+        //
+        // Example:
+        //
+        //     Mutil.addClass(my_div_element, 'foo', 'bar');
+        //
+
+        addClass: function(node) {
+            if(!this.isElement(node)) throw new TypeError();
+            var new_classes = this.toArray(arguments).slice(1),
+                classes     = node.className.split(/\s+/);
+            node.className = classes.concat(new_classes.filter(function(e) {
+                return !classes.include(e);
+            })).join(' ');
+        },
+
+        removeClass: function(node) {
+            if(!this.isElement(node)) throw new TypeError();
+            var classes = node.className;
+            this.toArray(arguments).slice(1).forEach(function(e) {
+                classes = classes.replace(new RegExp('\\b' + e + '\\b', 'g'), '');
+            });
+            node.className = this.trim(classes.replace(/\s+/g, ' '));
+        },
+
+        // ### Events
 
         // Execute a function when the DOM has finished loading. Any existing
         // functions will still be called.

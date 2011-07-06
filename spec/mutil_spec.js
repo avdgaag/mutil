@@ -1,4 +1,53 @@
 describe('Mutil', function() {
+    describe('classes', function() {
+        var p;
+
+        beforeEach(function() {
+            p = document.createElement('p');
+            p.className = 'foo';
+        });
+
+        it('should throw type error when working on a non-element', function() {
+            expect(function() { Mutil.addClass(false); }).toThrow();
+            expect(function() { Mutil.addClass('string'); }).toThrow();
+            expect(function() { Mutil.addClass(10); }).toThrow();
+            expect(function() { Mutil.addClass({}); }).toThrow();
+            expect(function() { Mutil.addClass([]); }).toThrow();
+        });
+
+        it('should add a single class name', function() {
+            Mutil.addClass(p, 'bar');
+            expect(p.className).toEqual('foo bar');
+        });
+
+        it('should add multiple class names', function() {
+            Mutil.addClass(p, 'bar', 'baz');
+            expect(p.className).toEqual('foo bar baz');
+        });
+
+        it('should not add duplicate class names', function() {
+            Mutil.addClass(p, 'foo', 'bar');
+            expect(p.className).toEqual('foo bar');
+        });
+
+        it('should remove a single class name', function() {
+            Mutil.removeClass(p, 'foo');
+            expect(p.className).toEqual('');
+        });
+
+        it('should remove multiple class names', function() {
+            p.className = 'foo bar baz';
+            Mutil.removeClass(p, 'foo', 'baz');
+            expect(p.className).toEqual('bar');
+        });
+
+        it('should remove duplicate class names', function() {
+            p.className = 'foo foo bar bar baz';
+            Mutil.removeClass(p, 'foo');
+            expect(p.className).toEqual('bar bar baz');
+        });
+    });
+
     describe('testing functions', function() {
         var a, s, f, n, e;
 
