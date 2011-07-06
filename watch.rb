@@ -38,10 +38,15 @@ unless respond_to?(:document) or respond_to?(:minify)
   abort 'Neither docco or uglify are available.'
 end
 
-# The actual watchr instructions
-watch('src/mutil.js') do |m|
-  document(m[0]) if respond_to?(:document)
-  minify(m[0])   if respond_to?(:minify)
-  puts 'Waiting for changes in ' + m[0] + '...'
+# Method that does the actual work for Watchr
+def update(f)
+  document(f) if respond_to?(:document)
+  minify(f)   if respond_to?(:minify)
+  puts 'Waiting for changes in ' + f + '...'
 end
+
+# The actual watchr instructions
+watch('src/mutil.js') { |m| update(m[0]) }
+
+update('src/mutil.js')
 
