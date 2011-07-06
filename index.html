@@ -1,235 +1,443 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		
-		<title>JsDoc Reference - Index</title>
-		<meta name="generator" content="JsDoc Toolkit" />
-		
-		<style type="text/css">
-		/* default.css */
-body
-{
-	font: 12px "Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
-	width: 800px;
+<!DOCTYPE html>  <html> <head>   <title>mutil.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               mutil.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h3>A tiny javascript utility belt</h3>
+
+<p>Mutil is a micro-framework, a collection of helper functions that you often
+need. Full-blown frameworks like jQuery can be overkill for minor scripting
+tasks. Mutil is light-weight but still provides some useful functions for
+functional programming and dealing with DOM events across browsers.</p>
+
+<p>Mutil does not do Ajax, advanced templating, advanced selectors or
+animation. If you need any of those, you're better off going with
+<a href="http://jquery.com">jQuery</a> or some other full-blown framework.</p>
+
+<p><strong>Note</strong>: Mutil does not implement all the advanced javascript functions
+that are found in modern browsers, but not in IE. Although it mimicks some
+of these, some are intentionally left out to stay lean.</p>
+
+<p>Find the source code and tests <a href="http://github.com/avdgaag/mutil">at Github</a>
+and the documentation at <a href="http://avdgaag.github.com/mutil">the mutil homepage</a>.</p>
+
+<p><strong>Author</strong>: <a href="http://arjanvandergaag.nl">Arjan van der Gaag</a> <br />
+<strong>Date</strong>: 2011-07-06 <br />
+<strong>License</strong>: MIT License  </p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h3>Initial setup</h3>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Shortcuts to commonly used functions</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">slice</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>All our functions are namespaced under <code>Mutil</code>, which is the only variable
+that leaves the wrapping closure. Optionally, you may want to globalize
+the <code>Mutil.$</code> function yourself, if that would not conflict with other
+libraries: <code>window.$ = Mutil.$</code>.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nb">window</span><span class="p">.</span><span class="nx">Mutil</span> <span class="o">=</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Current version number, using <a href="http://semver.org">semantic
+versioning</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">VERSION</span><span class="o">:</span> <span class="s1">&#39;0.1.0&#39;</span><span class="p">,</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <h3>Extending native functions</h3>
+
+<p>Extend native objects and types with utility functions that may or
+may not already be present, depending on the environment (read:
+unavailable on IE).</p>
+
+<p>This is not enabled by default, since it may interfere with other
+code you use. You will need to opt-in by calling <code>Mutil.nativize()</code>
+once at the start of your script.</p>
+
+<p>Example before and after:</p>
+
+<pre><code>// vanilla style
+Mutil.forEach([1, 2, 3], function(el) {
+    console.log(el);
+});
+// nativized style
+[1, 2, 3].forEach(function(el) {
+    console.log(el);
+});
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">nativize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">improve</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">names</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">names</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">obj</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="p">{</span>
+                        <span class="nx">obj</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                            <span class="nx">args</span> <span class="o">=</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+                            <span class="nx">args</span><span class="p">.</span><span class="nx">unshift</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+                            <span class="k">return</span> <span class="nx">that</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">apply</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+                        <span class="p">};</span>
+                    <span class="p">}</span>
+                <span class="p">});</span>
+            <span class="p">};</span>
+            <span class="nx">improve</span><span class="p">(</span><span class="nb">Array</span><span class="p">,</span>    <span class="p">[</span><span class="s1">&#39;forEach&#39;</span><span class="p">,</span> <span class="s1">&#39;reduce&#39;</span><span class="p">,</span> <span class="s1">&#39;map&#39;</span><span class="p">,</span> <span class="s1">&#39;filter&#39;</span><span class="p">,</span> <span class="s1">&#39;pluck&#39;</span><span class="p">,</span> <span class="s1">&#39;invoke&#39;</span><span class="p">,</span> <span class="s1">&#39;include&#39;</span><span class="p">]);</span>
+            <span class="nx">improve</span><span class="p">(</span><span class="nb">String</span><span class="p">,</span>   <span class="p">[</span><span class="s1">&#39;trim&#39;</span><span class="p">,</span> <span class="s1">&#39;format&#39;</span><span class="p">]);</span>
+            <span class="nx">improve</span><span class="p">(</span><span class="nb">Object</span><span class="p">,</span>   <span class="p">[</span><span class="s1">&#39;extend&#39;</span><span class="p">,</span> <span class="s1">&#39;tap&#39;</span><span class="p">,</span> <span class="s1">&#39;forEach&#39;</span><span class="p">]);</span>
+            <span class="nx">improve</span><span class="p">(</span><span class="nb">Function</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;bind&#39;</span><span class="p">]);</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>Utility shortcut function that mimicks jQuery's convention of selecting
+DOM elements or adding onload-functions using the dollar function.</p>
+
+<p>You may want to globalize this function: <code>window.$ = Mutil.$</code>, but
+beware of conflicts with other libraries you might be using.</p>
+
+<p>Example:</p>
+
+<pre><code>$(function() {
+    console.log($('p'));
+});
+// log all paragraphs once the page has loaded
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">$</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">o</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">addLoadEvent</span><span class="p">(</span><span class="nx">o</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">args</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <h3>Mini DOM selector engine</h3>
+
+<p>Very simple selection of DOM elements, supporting the following
+selectors:</p>
+
+<ul>
+<li>by tag: <code>p</code></li>
+<li>by id: <code>#foo</code></li>
+<li>by class: <code>.bar</code>, <code>p.bar</code>, <code>#foo.bar.baz</code></li>
+<li>descendants: <code>#foo bar</code></li>
+<li>multiples: <code>#foo, .bar</code></li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">query</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="nx">scope</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>You can scope the query to one or more elements using <code>scope</code>,
+which defaults to <code>document</code>.</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="nx">scope</span> <span class="o">=</span> <span class="nx">scope</span> <span class="o">||</span> <span class="nb">document</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>If the <code>scope</code> consists of multiple elements, simply call
+<code>query</code> again for every element, concatenating the results into
+one big result array.</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">scope</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="p">[],</span> <span class="k">this</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nx">memo</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="nx">s</span><span class="p">));</span>
+                <span class="p">},</span> <span class="k">this</span><span class="p">));</span>
+            <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <p><strong>multiple selectors</strong>: when the selector string has multiple
+comma-separated selectors, we simply run <code>query</code> again for each
+selector and collect the results in one big array.</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="k">if</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/,/</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\s*,\s*/</span><span class="p">),</span> <span class="p">[],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">part</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nx">memo</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">part</span><span class="p">));</span>
+                <span class="p">},</span> <span class="k">this</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <p><strong>descendents</strong>: when the selector string has white space, it
+indicates descendent parts. We Run <code>query</code> for every part of
+the selector, using the results of the previous query as
+scope for the new query.</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/\s+/</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\s+/</span><span class="p">),</span> <span class="nb">document</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nx">memo</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">memo</span><span class="p">);</span>
+                <span class="p">},</span> <span class="k">this</span><span class="p">));</span></pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <p><strong>classess</strong>: a dot in the selector indicates one or more
+classes. The first part of a class selector is either a
+selector or nothing, in which case we default to all ('*').
+We then find the first part, and filter that down to match
+all listed classes.</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/\./</span><span class="p">))</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">parts</span>   <span class="o">=</span> <span class="nx">q</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">),</span>
+                    <span class="nx">el</span>      <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span>
+                    <span class="nx">classes</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">scope</span><span class="p">),</span> <span class="k">this</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">classes</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">cls</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">return</span> <span class="nx">memo</span> <span class="o">&amp;&amp;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">className</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">cls</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="p">});</span>
+                <span class="p">},</span> <span class="k">this</span><span class="p">));</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <p><strong>IDs</strong>: a hash indicates an ID, which we can very simply
+retrieve. To keep a consistent interface we wrap the result
+in an array.</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">matches</span> <span class="o">=</span> <span class="nx">q</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/#([a-zA-Z\-_0-9]+)/</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">tap</span><span class="p">([],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="nx">_el</span> <span class="o">=</span> <span class="nx">scope</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">matches</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="nx">o</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">_el</span><span class="p">);</span>
+                <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <p><strong>tag names</strong>: if all else fails, we simply query by tag name
+for the selector string.</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">scope</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">q</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <h2>Event handling</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <p>Execute a function when the DOM has finished loading. Any existing
+functions will still be called.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">addLoadEvent</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">old</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">onload</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">old</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">;</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">old</span><span class="p">)</span> <span class="nx">old</span><span class="p">();</span>
+                <span class="nx">fn</span><span class="p">();</span>
+            <span class="p">};</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <p>Add an event handler to a DOM element. Based on <a href="http://ejohn.org/projects/flexible-javascript-events/">John Resig's
+flexible javascript
+events</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">addEvent</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">[</span><span class="s1">&#39;e&#39;</span> <span class="o">+</span> <span class="nx">type</span> <span class="o">+</span> <span class="nx">fn</span><span class="p">]</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">;</span>
+                <span class="nx">node</span><span class="p">[</span><span class="nx">type</span> <span class="o">+</span> <span class="nx">fn</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">this</span><span class="p">[</span><span class="s1">&#39;e&#39;</span> <span class="o">+</span> <span class="nx">type</span> <span class="o">+</span> <span class="nx">fn</span><span class="p">](</span><span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="p">)</span> <span class="p">}</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">(</span><span class="s1">&#39;on&#39;</span> <span class="o">+</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">node</span><span class="p">[</span><span class="nx">type</span> <span class="o">+</span> <span class="nx">fn</span><span class="p">]);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <p>Remove an event handler from a DOM element. Based on <a href="http://ejohn.org/projects/flexible-javascript-events/">John Resig's
+flexible javascript
+events</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">removeEvent</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">detachEvent</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">detachEvent</span><span class="p">(</span><span class="s1">&#39;on&#39;</span> <span class="o">+</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">node</span><span class="p">[</span><span class="nx">type</span> <span class="o">+</span> <span class="nx">fn</span><span class="p">]);</span>
+                <span class="nx">node</span><span class="p">[</span><span class="nx">type</span> <span class="o">+</span> <span class="nx">fn</span><span class="p">]</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <h2>Array enhancements</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <p>Call a function for every element in an array, or every property in
+an object.  Use the native forEach if available. This function forms
+the basis of most other Array enhancements.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">forEach</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">obj</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">forEach</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">forEach</span> <span class="o">===</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">forEach</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">obj</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span> <span class="nx">context</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">length</span><span class="p">.</span><span class="nx">toExponential</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">length</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">j</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">fn</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">obj</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+                        <span class="nx">fn</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Not iterable: &#39;</span> <span class="o">+</span> <span class="k">typeof</span> <span class="nx">obj</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-22">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-22">&#182;</a>               </div>               <p>See if an array contains a given element.</p>
+
+<p>Example:</p>
+
+<pre><code>Mutil.include([1, 2, 3], 2)
+// =&gt; true
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">include</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">target</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">e</span> <span class="o">===</span> <span class="nx">target</span><span class="p">;</span>
+            <span class="p">}).</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>               <p>Create a new array with only those elements from the input array for
+which a callback function returns a truthy value.</p>
+
+<p>Example:</p>
+
+<pre><code>Mutil.filter([1,2,3], function(e) { return e &gt; 1; });
+// =&gt; [2, 3]
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">filter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">filter</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">filter</span> <span class="o">===</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span> <span class="nx">context</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="p">[],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="nx">fn</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">el</span><span class="p">))</span> <span class="p">{</span>
+                        <span class="nx">memo</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">});</span>
+            <span class="p">}</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-24">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-24">&#182;</a>               </div>               <p>Create a new array with the values of a given attribute for every
+element in the input array -- a shortcut method for using <code>map</code>.</p>
+
+<p>Example:</p>
+
+<pre><code>Mutil.pluck(['foo', 'foofoo'], 'length');
+// =&gt; [3, 6]
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">pluck</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">attr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">el</span><span class="p">[</span><span class="nx">attr</span><span class="p">];</span>
+            <span class="p">});</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-25">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-25">&#182;</a>               </div>               <p>Create a new array with the return values of calling a given
+function name on every element in the input array. Any additional
+arguments are passed along to the called function.</p>
+
+<p>Example:</p>
+
+<pre><code>Mutil.invoke(['foo', 'bar'], 'toUpperCase');
+// =&gt; ['FOO', 'BAR']
+Mutil.invoke(['foo', 'bar'], 'substr', 1);
+// =&gt; ['oo', 'ar']
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">invoke</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">el</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">apply</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-26">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-26">&#182;</a>               </div>               <p>Apply a callback function to every element in the input array,
+returning a new array with the return values.</p>
+
+<p>Example:</p>
+
+<pre><code>Mutil.map([1,2,3], function(e) { return e * 2; });
+// =&gt; [2,4,6]
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">map</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">map</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">map</span> <span class="o">==</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">map</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span> <span class="nx">context</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="p">[],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">memo</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">fn</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">el</span><span class="p">));</span>
+                <span class="p">});</span>
+            <span class="p">}</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-27">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-27">&#182;</a>               </div>               <p>Apply a callback function to all the elements in an array, using the
+return value as the new input for the next element, to finally
+reduce the entire array to a single, new value.</p>
+
+<p>Example:</p>
+
+<pre><code>Mutil.reduce([1,2,3], 10, function(memo, e) {
+    return memo + e;
+});
+// =&gt; 16
+</code></pre>
+
+<p><strong>Note</strong>: this function differes slightly from the native
+implementation. In native functions, the <code>memo</code> argument comes
+<em>after</em> the callback function, while the <code>context</code> argument is not
+supported. Note that when using <code>Mutil.nativize</code> you will get the
+native version, not this version.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">reduce</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">memo</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">reduce</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">reduce</span> <span class="o">===</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">reduce</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">fn</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span> <span class="nx">context</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span> <span class="nx">memo</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">memo</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">memo</span><span class="p">,</span> <span class="nx">el</span><span class="p">);</span>
+            <span class="p">});</span>
+            <span class="k">return</span> <span class="nx">memo</span><span class="p">;</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-28">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-28">&#182;</a>               </div>               <h2>String functions</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-29">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-29">&#182;</a>               </div>               <p>Remove any whitespace at the start and end of a string.</p>
+
+<p>Example:</p>
+
+<pre><code>Mutil.trim('  foo  ');
+// =&gt; 'foo'
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">trim</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\s*|\s*$/g</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-30">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-30">&#182;</a>               </div>               <p>Very simple templating using string interpolation, replacing
+all the keys in a template string with the values from a hash.</p>
+
+<p>Example:</p>
+
+<pre><code>Mutil.format('Hello, {who}!', { who: 'world' });
+// =&gt; 'Hello, world!'
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">format</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">template</span><span class="p">,</span> <span class="nx">vars</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">vars</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">template</span> <span class="o">=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">&#39;{&#39;</span> <span class="o">+</span> <span class="nx">k</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">),</span> <span class="nx">v</span><span class="p">);</span>
+            <span class="p">});</span>
+            <span class="k">return</span> <span class="nx">template</span><span class="p">;</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-31">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-31">&#182;</a>               </div>               <h2>Object/generic functions</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <p>'Tap' into an object, first passing it to a callback function and then
+returning it. This can be useful in method chains.</p>
+
+<p>Example:</p>
+
+<pre><code>Mutil.tap('Foo', function(s) { console.log(s); }).toLowerCase();
+// =&gt; 'Foo'
+// =&gt; 'foo'
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">tap</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">fn</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-33">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-33">&#182;</a>               </div>               <p>Copy the properties of one or more objects into a host object,
+replacing any existing properties it might have.</p>
+
+<p>Example:</p>
+
+<pre><code>Mutil.extend({ foo: 'bar' }, { foo: 'baz' }, { baz: 'qux' });
+// =&gt; { foo: 'baz', baz: 'qux' }
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">extend</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">host</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">others</span> <span class="o">=</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="nx">that</span>   <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">others</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">other</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">host</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span> <span class="o">=</span> <span class="nx">v</span><span class="p">;</span>
+                <span class="p">});</span>
+            <span class="p">});</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-34">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-34">&#182;</a>               </div>               <h2>Function functions</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-35">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-35">&#182;</a>               </div>               <p>Force a function to be executed in a specific context, useful when
+using object methods as event handlers.</p>
+
+<p>Example:</p>
+
+<pre><code>var foo = function() {
+    return this.bar;
 }
+foo.call({ bar: 'baz' }) // =&gt; 'baz'
+foo = Mutil.bind(foo, { bar: 'qux' });
+foo.call({ bar: 'baz' }) // =&gt; 'qux'
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">bind</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+            <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)));</span>
+            <span class="p">};</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-36">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-36">&#182;</a>               </div>               <h2>Testing functions</h2>
 
-.header
-{
-	clear: both;
-	background-color: #ccc;
-	padding: 8px;
+<p>Some simple helper functions to help you determine the the type of a
+given value. You can test for functions, arrays, strings, numbers,
+<code>undefined</code> and DOM elements.</p>
+
+<p>There is also a simple <code>toArray</code> function that uses
+<code>Array.prototype.slice</code> to convert a given value to an array.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">isArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;[object Array]&#39;</span><span class="p">;</span>
+        <span class="p">},</span>
+
+        <span class="nx">isFunction</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">!!</span><span class="p">(</span><span class="nx">obj</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">call</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">apply</span><span class="p">);</span>
+        <span class="p">},</span>
+
+        <span class="nx">isString</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">!!</span><span class="p">(</span><span class="nx">obj</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span> <span class="o">||</span> <span class="p">(</span><span class="nx">obj</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">charCodeAt</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">substr</span><span class="p">));</span>
+        <span class="p">},</span>
+
+        <span class="nx">isElement</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">!!</span><span class="p">(</span><span class="nx">obj</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">nodeType</span> <span class="o">===</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">},</span>
+
+        <span class="nx">isNumber</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">obj</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="nx">obj</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">toExponential</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">);</span>
+        <span class="p">},</span>
+
+        <span class="nx">isUndefined</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">obj</span> <span class="o">===</span> <span class="k">void</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">},</span>
+
+        <span class="nx">toArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+        <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-37">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-37">&#182;</a>               </div>               <h2>Mixins</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-38">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-38">&#182;</a>               </div>               <p>The <code>Observable</code> mixin can be added to any existing object to
+implement the observer pattern, allowing an arbitrary number of
+observers to listen for events in a host object.</p>
+
+<p>This code is based on the Events mixin from
+<a href="http://documentcloud.github.com/backbone">Backbone</a>.</p>
+
+<p>Usage:</p>
+
+<pre><code>function MyObject() {
 }
+MyObject.prototype.update_attribute = function(k,v) {
+    this[k] = v;
+    // Trigger an event and pass it some arguments
+    this.trigger('attribute_changed', k, v);
+};
 
-h1
-{
-	font-size: 150%;
-	font-weight: bold;
-	padding: 0;
-	margin: 1em 0 0 .3em;
-}
+// Mix in Observable
+Mutil.extend(MyObject, Mutil.Observable);
+obj = new MyObject();
 
-hr
-{
-	border: none 0;
-	border-top: 1px solid #7F8FB1;
-	height: 1px;
-}
+// Define an observer for the 'attribute_changed' event
+obj.bind('attribute_changed', function(k, v) {
+    console.log('Attribute ' + k + ' changed to ' + v + '.');
+});
 
-pre.code
-{
-	display: block;
-	padding: 8px;
-	border: 1px dashed #ccc;
-}
+obj.update_attribute('foo', 'bar');
+// =&gt; 'Attribute foo changed to bar'
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">Observable</span><span class="o">:</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-39">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-39">&#182;</a>               </div>               <p>Register a callback function as an observer for a given event.</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="nx">observe</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_observers</span> <span class="o">||</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_observers</span> <span class="o">=</span> <span class="p">{}),</span>
+                    <span class="nx">l</span> <span class="o">=</span> <span class="nx">o</span><span class="p">[</span><span class="nx">event</span><span class="p">]</span> <span class="o">||</span> <span class="p">(</span><span class="nx">o</span><span class="p">[</span><span class="nx">event</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]);</span>
+                <span class="nx">l</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">fn</span><span class="p">);</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+            <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-40">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-40">&#182;</a>               </div>               <p>Remove an observer from an observable object.</p>
 
-#index
-{
-	margin-top: 24px;
-	float: left;
-	width: 160px;
-	position: absolute;
-	left: 8px;
-	background-color: #F3F3F3;
-	padding: 8px;
-}
+<p>If <code>event</code> and <code>fn</code> are given, it removes function <code>fn</code> from the
+list of observers for the <code>event</code> event. If <code>fn</code> is omitted, all
+observers will be removed from <code>event</code>. If both <code>event</code> and <code>fn</code>
+are omitted, all observers will be removed.</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="nx">unobserve</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">o</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">_observers</span> <span class="o">=</span> <span class="p">{};</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">o</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_observers</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">o</span><span class="p">[</span><span class="nx">event</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="kd">var</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">o</span><span class="p">[</span><span class="nx">event</span><span class="p">];</span>
+                        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">l</span><span class="p">)</span> <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+                        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">l</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">j</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="k">if</span><span class="p">(</span><span class="nx">fn</span> <span class="o">===</span> <span class="nx">l</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
+                                <span class="nx">l</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+                                <span class="k">break</span><span class="p">;</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+            <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-41">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-41">&#182;</a>               </div>               <p>Trigger an event on the current object, passing along any
+arguments to all the observers. Observers will run in the
+context of the host object, so <code>this</code> will be the same as the
+observed object.</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="nx">trigger</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">o</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_observers</span><span class="p">))</span> <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">l</span> <span class="o">=</span> <span class="nx">o</span><span class="p">[</span><span class="nx">event</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">l</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">j</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">l</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">})();</span>
 
-#content
-{
-	margin-left: 190px;
-	width: 600px;
-}
-
-.classList
-{
-	list-style-type: none;
-	padding: 0;
-	margin: 0 0 0 8px;
-	font-family: arial, sans-serif;
-	font-size: 1em;
-	overflow: auto;
-}
-
-.classList li
-{
-	padding: 0;
-	margin: 0 0 8px 0;
-}
-
-.summaryTable { width: 100%; }
-
-h1.classTitle
-{
-	font-size:170%;
-	line-height:130%;
-}
-
-h2 { font-size: 110%; }
-caption, div.sectionTitle
-{
-	background-color: #7F8FB1;
-	color: #fff;
-	font-size:130%;
-	text-align: left;
-	padding: 2px 6px 2px 6px;
-	border: 1px #7F8FB1 solid;
-}
-
-div.sectionTitle { margin-bottom: 8px; }
-.summaryTable thead { display: none; }
-
-.summaryTable td
-{
-	vertical-align: top;
-	padding: 4px;
-	border-bottom: 1px #7F8FB1 solid;
-	border-right: 1px #7F8FB1 solid;
-}
-
-/*col#summaryAttributes {}*/
-.summaryTable td.attributes
-{
-	border-left: 1px #7F8FB1 solid;
-	width: 140px;
-	text-align: right;
-}
-
-td.attributes, .fixedFont
-{
-	line-height: 15px;
-	color: #002EBE;
-	font-family: "Courier New",Courier,monospace;
-	font-size: 13px;
-}
-
-.summaryTable td.nameDescription
-{
-	text-align: left;
-	font-size: 13px;
-	line-height: 15px;
-}
-
-.summaryTable td.nameDescription, .description
-{
-	line-height: 15px;
-	padding: 4px;
-	padding-left: 4px;
-}
-
-.summaryTable { margin-bottom: 8px; }
-
-ul.inheritsList
-{
-	list-style: square;
-	margin-left: 20px;
-	padding-left: 0;
-}
-
-.detailList {
-	margin-left: 20px; 
-	line-height: 15px;
-}
-.detailList dt { margin-left: 20px; }
-
-.detailList .heading
-{
-	font-weight: bold;
-	padding-bottom: 6px;
-	margin-left: 0;
-}
-
-.light, td.attributes, .light a:link, .light a:visited
-{
-	color: #777;
-	font-style: italic;
-}
-
-.fineprint
-{
-	text-align: right;
-	font-size: 10px;
-}
-		</style>
-	</head>
-	
-	<body>
-		<div id="header">
-</div>
-		
-		<div id="index">
-			<div align="center"><a href="index.html">Class Index</a>
-| <a href="files.html">File Index</a></div>
-<hr />
-<h2>Classes</h2>
-<ul class="classList">
-	
-	<li><i><a href="symbols/_global_.html">_global_</a></i></li>
-	
-	<li><a href="symbols/Enumerable.html">Enumerable</a></li>
-	
-	<li><a href="symbols/Mutil.html">Mutil</a></li>
-	
-	<li><a href="symbols/String.html">String</a></li>
-	
-</ul>
-<hr />
-		</div>
-		
-		<div id="content">
-			<h1 class="classTitle">Class Index</h1>
-			
-			
-			<div>
-				<h2><a href="symbols/_global_.html">_global_</a></h2>
-				
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/Enumerable.html">Enumerable</a></h2>
-				The enumerable mix in provides helper functions for working with
-arrays.
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/Mutil.html">Mutil</a></h2>
-				Select DOM elements by using a really simple CSS selector syntax.
-			</div>
-			<hr />
-			
-			<div>
-				<h2><a href="symbols/String.html">String</a></h2>
-				
-			</div>
-			<hr />
-			
-			
-		</div>
-		<div class="fineprint" style="clear:both">
-			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blankt">JsDoc Toolkit</a> 2.3.2 on Wed Feb 03 2010 11:04:04 GMT+0100 (CET)
-		</div>
-	</body>
-</html>
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
