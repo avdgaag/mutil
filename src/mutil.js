@@ -511,7 +511,7 @@
                 return obj;
             } else if(obj.toArray) {
                 return obj.toArray();
-            } else if(obj && obj.hasOwnProperty('calllee')) {
+            } else if(obj && Object.prototype.hasOwnProperty.call(obj, 'callee')) {
                 return slice.call(obj);
             } else {
                 var arr = [];
