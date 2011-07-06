@@ -18,7 +18,7 @@
 //
 // **Author**: [Arjan van der Gaag](http://arjanvandergaag.nl)  
 // **Date**: 2011-07-06  
-// **License**: MIT License  
+// **License**: MIT License
 //
 (function() {
     // ### Initial setup
