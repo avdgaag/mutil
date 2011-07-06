@@ -305,6 +305,7 @@
                     if(fn.call(context, el)) {
                         memo.push(el);
                     }
+                    return memo;
                 });
             }
         },
