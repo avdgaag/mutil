@@ -1,0 +1,23 @@
+MUTIL
+A tiny javascript utility belt
+
+Mutil is a micro-framework, a collection of helper functions that you often
+need. Full-blown frameworks like jQuery can be overkill for minor scripting
+tasks. Mutil is light-weight but still provides some useful functions for
+functional programming and dealing with DOM events across browsers.
+
+Mutil does not do Ajax, advanced templating, advanced selectors or animation.
+If you need any of those, you're better off going with jQuery or some other
+full-blown framework.
+
+NOTE: Mutil does not implement all the advanced javascript functions that are
+found in modern browsers, but not in IE. Although it mimicks some of these,
+some are intentionally left out to stay lean.
+
+Author:  Arjan van der Gaag (http://arjanvandergaag.nl)
+Date:    2011-07-06
+License: MIT License
+More information:
+
+* http://github.com/avdgaag/mutil
+* http://avdgaag.github.com/mutil
