@@ -24,7 +24,13 @@
     // ### Initial setup
 
     // Shortcuts to commonly used functions
-    var slice = Array.prototype.slice;
+    var slice = Array.prototype.slice,
+        native = {
+            forEach: Array.prototype.forEach,
+            reduce:  Array.prototype.reduce,
+            map:     Array.prototype.map,
+            filter:  Array.prototype.filter
+        };
 
     // All our functions are namespaced under `Mutil`, which is the only variable
     // that leaves the wrapping closure. Optionally, you may want to globalize
@@ -63,7 +69,7 @@
                 that.forEach(names, function(name) {
                     if(!obj.prototype[name]) {
                         obj.prototype[name] = function() {
-                            args = slice.call(arguments);
+                            args = that.toArray(arguments);
                             args.unshift(this);
                             return that[name].apply(that, args);
                         };
@@ -253,7 +259,7 @@
         // the basis of most other Array enhancements.
         forEach: function(obj, fn, context) {
             if(obj == null) return;
-            if(Array.prototype.forEach && obj.forEach === Array.prototype.forEach) {
+            if(native.forEach && obj.forEach === native.forEach) {
                 obj.forEach(fn, context);
             } else if(obj.length === 0 || (obj.length && obj.length.toExponential && obj.length.toFixed)) {
                 for(var i = 0, j = obj.length; i < j; i++) {
@@ -292,7 +298,7 @@
         //     // => [2, 3]
         //
         filter: function(obj, fn, context) {
-            if(Array.prototype.filter && obj.filter === Array.prototype.filter) {
+            if(native.filter && obj.filter === native.filter) {
                 return obj.filter(fn, context);
             } else {
                 return this.reduce(obj, [], function(memo, el) {
@@ -344,7 +350,7 @@
         //     // => [2,4,6]
         //
         map: function(obj, fn, context) {
-            if(Array.prototype.map && obj.map == Array.prototype.map) {
+            if(native.map && obj.map == native.map) {
                 return obj.map(fn, context);
             } else {
                 return this.reduce(obj, [], function(memo, el) {
@@ -370,7 +376,7 @@
         // supported. Note that when using `Mutil.nativize` you will get the
         // native version, not this version.
         reduce: function(obj, memo, fn, context) {
-            if(Array.prototype.reduce && obj.reduce === Array.prototype.reduce) {
+            if(native.reduce && obj.reduce === native.reduce) {
                 if(context) {
                     fn = this.bind(fn, context);
                 }
