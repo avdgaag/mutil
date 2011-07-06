@@ -74,6 +74,7 @@
             improve(String,   ['trim', 'format']);
             improve(Object,   ['extend', 'tap', 'forEach']);
             improve(Function, ['bind']);
+            return this;
         },
 
         // Utility shortcut function that mimicks jQuery's convention of selecting
@@ -275,7 +276,7 @@
         //
         //     Mutil.include([1, 2, 3], 2)
         //     // => true
-        // 
+        //
         include: function(obj, target) {
             return this.filter(obj, function(e) {
                 return e === target;
@@ -583,5 +584,12 @@
             }
         }
     };
+
+    // ### Bind `$` to `Mutil`
+    //
+    // Should you want to take the `$` function elsewhere, for example by
+    // assigning it to the `window` global, you can depend on it staying in the
+    // appropriate `Mutil` context.
+    Mutil.$ = Mutil.bind(Mutil.$, Mutil);
 })();
 
