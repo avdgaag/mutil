@@ -208,9 +208,10 @@
         addClass: function(node) {
             if(!this.isElement(node)) throw new TypeError();
             var new_classes = this.toArray(arguments).slice(1),
-                classes     = node.className.split(/\s+/);
+                classes     = node.className.split(/\s+/),
+                that        = this;
             node.className = classes.concat(new_classes.filter(function(e) {
-                return !classes.include(e);
+                return !that.include(classes, e);
             })).join(' ');
         },
 
