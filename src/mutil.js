@@ -20,6 +20,15 @@
 // **Date**: 2011-07-06  
 // **License**: MIT License
 //
+// ### To Do
+//
+// * Implement a custom Event object that makes the most commons tasks of
+//   working with events cross-browser compatible.
+//
+// * Provide a simple wrapper around collections returned by `query` to
+//   quickly use those results as scope for a new query, bind events to
+//   them or add/remove classes.
+//
 (function() {
     // ### Initial setup
 
