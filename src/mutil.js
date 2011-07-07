@@ -88,10 +88,10 @@
                     }
                 });
             };
-            improve(Array,    ['forEach', 'reduce', 'map', 'filter', 'pluck', 'invoke', 'include']);
-            improve(String,   ['trim', 'format']);
+            improve(Array,    ['forEach', 'reduce', 'map', 'filter', 'without', 'pluck', 'invoke', 'include', 'without', 'tap']);
+            improve(String,   ['trim', 'format', 'toElement']);
             improve(Object,   ['extend', 'tap', 'forEach']);
-            improve(Function, ['bind']);
+            improve(Function, ['bind', 'tap']);
             return this;
         },
 

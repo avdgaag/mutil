@@ -57,6 +57,25 @@ describe('Mutil', function() {
             fn = fn.bind(context);
             fn();
         });
+
+        describe('tap', function() {
+            var fn;
+
+            beforeEach(function() {
+                fn = function() {};
+            });
+
+            it('should yield itself', function() {
+                fn.tap(function(o) {
+                    expect(o).toBe(fn);
+                });
+            });
+
+            it('should return itself', function() {
+                expect(fn.tap(function() {})).toBe(fn);
+            });
+        });
+
     });
 
     describe('String functions', function() {
@@ -143,6 +162,18 @@ describe('Mutil', function() {
         beforeEach(function() {
             arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
             obj = { 'a': 1, 'b': 2, 'c': 3 };
+        });
+
+        describe('tap', function() {
+            it('should yield itself', function() {
+                arr.tap(function(o) {
+                    expect(o).toBe(arr);
+                });
+            });
+
+            it('should return itself', function() {
+                expect(arr.tap(function() {})).toBe(arr);
+            });
         });
 
         describe('without', function() {
