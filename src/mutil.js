@@ -52,7 +52,7 @@
 
         // Current version number, using [semantic
         // versioning](http://semver.org).
-        VERSION: '0.1.2',
+        VERSION: '0.1.3',
 
         // ### Extending native functions
         //
