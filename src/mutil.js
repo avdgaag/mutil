@@ -1,24 +1,37 @@
 // ### A tiny javascript utility belt
 //
-// Mutil is a micro-framework, a collection of helper functions that you often
-// need. Full-blown frameworks like jQuery can be overkill for minor scripting
-// tasks. Mutil is light-weight but still provides some useful functions for
-// functional programming and dealing with DOM events across browsers.
+// Mutil is a micro-framework, a collection of helper functions that I have
+// often needed. Sometimes you don't need the Ajax, animation, advanced
+// selectors etc. that full-blown frameworks like Prototype or jQuery provide.
+// This is a light-weight framework with the basics needed to write custom tiny
+// Javascript apps.
 //
-// Mutil does not do Ajax, advanced templating, advanced selectors or
-// animation. If you need any of those, you're better off going with
-// [jQuery](http://jquery.com) or some other full-blown framework.
+// Mutil provides some basic functional programming functions, basic DOM
+// querying, event handling and class manipulation. It does provide
+// implementations of all new javascript features missing in older browsers,
+// only the most used. It does try to fall back to native implementations,
+// should they exist.
 //
-// **Note**: Mutil does not implement all the advanced javascript functions
-// that are found in modern browsers, but not in IE. Although it mimicks some
-// of these, some are intentionally left out to stay lean.
+// ### Object-oriented or functional style
 //
-// Find the source code and tests [at Github](http://github.com/avdgaag/mutil)
-// and the documentation at [the mutil homepage](http://avdgaag.github.com/mutil).
+// You can use Mutil in two ways:
+//
+// * As a stand-alone global object, using a functional style like
+//   `Mutil.filter([1,2,3], function(i) { return i > 2; });`.
+//
+// * Let Mutil extend native objects, enabling an object-oriented style, like
+//   `[1,2,3].filter(function(i) { return i > 2; });`.
+//
+// Which way you go depends on possible conflicts with other code and your
+// personal preference.
+//
+// ### Credits & More information
 //
 // **Author**: [Arjan van der Gaag](http://arjanvandergaag.nl)  
 // **Date**: 2011-07-06  
-// **License**: MIT License
+// **License**: MIT License  
+// **Source**: [http://github.com/avdgaag/mutil](http://github.com/avdgaag/mutil)  
+// **Homepage**: [http://avdgaag.com/mutil](http://avdgaag.com/mutil)
 //
 // ### To Do
 //
@@ -28,6 +41,9 @@
 // * Provide a simple wrapper around collections returned by `query` to
 //   quickly use those results as scope for a new query, bind events to
 //   them or add/remove classes.
+//
+// * Include proper attribution to John Resig, Underscore, Backbone and
+//   all the other sources good ideas and code were stolen from.
 //
 (function() {
     // ### Initial setup
