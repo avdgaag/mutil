@@ -33,13 +33,16 @@
     // ### Initial setup
 
     // Shortcuts to commonly used functions
-    var slice = Array.prototype.slice,
-        native = {
-            forEach: Array.prototype.forEach,
-            reduce:  Array.prototype.reduce,
-            map:     Array.prototype.map,
-            filter:  Array.prototype.filter
-        };
+    var slice = Array.prototype.slice;
+
+    // Test for native implementations of some our helper functions before we
+    // do anything else
+    var native = {
+        forEach: Array.prototype.forEach,
+        reduce:  Array.prototype.reduce,
+        map:     Array.prototype.map,
+        filter:  Array.prototype.filter
+    };
 
     // All our functions are namespaced under `Mutil`, which is the only variable
     // that leaves the wrapping closure. Optionally, you may want to globalize
