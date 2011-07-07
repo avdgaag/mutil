@@ -528,9 +528,6 @@
         // Some simple helper functions to help you determine the the type of a
         // given value. You can test for functions, arrays, strings, numbers,
         // `undefined` and DOM elements.
-        //
-        // There is also a simple `toArray` function that uses
-        // `Array.prototype.slice` to convert a given value to an array.
 
         isArray: function(obj) {
             return Object.prototype.toString.call(obj) === '[object Array]';
@@ -556,6 +553,11 @@
             return obj === void 0;
         },
 
+        // Here is a `toArray` function that converts basically anything
+        // safely to an array. Use this function rather than
+        // `Array.prototype.slice.call`, since that is not allowed to operate
+        // on, for example, `NodeList`s or `arguments`. It still works in
+        // most browsers, but not in IE.
         toArray: function(obj) {
             if(this.isArray(obj)) {
                 return obj;
