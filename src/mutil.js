@@ -242,6 +242,60 @@
 
         // ### Events
 
+        // Use a **custom Event object** to make working with events across browsers easier.
+        // Most common differences between browsers are handled here, so your event handlers
+        // can work with a consistent interface.
+        //
+        // What's happening:
+        //
+        // * Clone all the properties of the event into this object
+        //
+        // * Provide `preventDefault()`, `stopPropagation()` and `stopImmediatePropagation()`
+        //   that work across browsers
+        //
+        // * Set the right poperties for `target`, `relatedTarget` and `which`.
+        //
+        // To make sure event handlers are passed an instance of Mutil.Event,
+        // the `addEvent` and `removeEvent` use `normalizeEvent` and
+        // `denormalizeEvent` to wrap event handlers in a custom function that
+        // creates a `Mutil.Event` object for the actual handler.
+        Event: (function(Mutil) {
+            var fntrue = function() { return true; },
+                fnfalse = function() { return false; };
+
+            function Event(e) {
+                Mutil.extend(this, (e || window.event));
+
+                if(!this.target) {
+                    this.target = event.srcElement || document;
+                }
+
+                this.relatedTarget                 = this.fromElement === this.target ? this.toElement : this.fromElement;
+                this.isDefaultPrevented            = fnfalse;
+                this.isPropagationStopped          = fnfalse;
+                this.isImmediatePropagationStopped = fnfalse;
+
+                this.which = this.charCode || this.keyCode;
+            }
+
+            Event.prototype.preventDefault = function() {
+                this.returnValue = false;
+                this.isDefaultPrevented = fntrue;
+            };
+
+            Event.prototype.stopPropagation = function() {
+                this.cancelBubble = true;
+                this.isPropagationStopped = fntrue;
+            };
+
+            Event.prototype.stopImmediatePropagation = function() {
+                this.isImmediatePropagationStopped = fntrue;
+                this.stopPropagation();
+            };
+
+            return Event;
+        })(this),
+
         // Execute a function when the DOM has finished loading. Any existing
         // functions will still be called.
         addLoadEvent: function(fn) {
@@ -256,10 +310,28 @@
             };
         },
 
+        // Normalize the event the given event handler will work with. Simply
+        // provide a new function that will call `fn` with a new `Mutil.Event`.
+        //
+        // Store the created wrapper function in `fn` so you can get to it
+        // when you want to remove it later.
+        normalizeEvent: function(fn) {
+            return fn._mutil_wrapper = function(e) {
+                fn.call(this, new Mutil.Event(e));
+            };
+        },
+
+        // Return either the original function, or its wrapper function if it
+        // has been set.
+        denormalizeEvent: function(fn) {
+            return fn._mutil_wrapper ? fn._mutil_wrapper : fn;
+        },
+
         // Add an event handler to a DOM element. Based on [John Resig's
         // flexible javascript
         // events](http://ejohn.org/projects/flexible-javascript-events/).
         addEvent: function(node, type, fn) {
+            fn = this.normalizeEvent(fn);
             if(node.attachEvent) {
                 node['e' + type + fn] = fn;
                 node[type + fn] = function() { node['e' + type + fn](window.event) }
@@ -273,6 +345,7 @@
         // flexible javascript
         // events](http://ejohn.org/projects/flexible-javascript-events/).
         removeEvent: function(node, type, fn) {
+            fn = this.denormalizeEvent(fn);
             if(node.detachEvent) {
                 node.detachEvent('on' + type, node[type + fn]);
                 node[type + fn] = null;
