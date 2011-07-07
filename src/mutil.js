@@ -322,6 +322,21 @@
             }
         },
 
+        // Return a copy of the input array with all additional arguments
+        // removed from it.
+        //
+        // Example:
+        //
+        //     Mutil.without([1,2,3,4], 1, 3);
+        //     // => [2, 4]
+        //
+        without: function(obj) {
+            var exceptions = this.toArray(arguments).slice(1);
+            return this.filter(obj, function(el) {
+                return !exceptions.include(el);
+            });
+        },
+
         // Create a new array with the values of a given attribute for every
         // element in the input array -- a shortcut method for using `map`.
         //

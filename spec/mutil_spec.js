@@ -326,6 +326,30 @@ describe('Mutil', function() {
             });
         });
 
+        describe('without', function() {
+            var arr;
+
+            beforeEach(function() {
+                arr = [1, 2, 3];
+            });
+
+            it('should return input array when no arguments given', function() {
+                expect(Mutil.without(arr)).toEqual(arr);
+            });
+
+            it('should remove a single element', function() {
+                expect(Mutil.without(arr, 2)).toEqual([1,3]);
+            });
+
+            it('should remove multiple elements', function() {
+                expect(Mutil.without(arr, 2, 3)).toEqual([1]);
+            });
+
+            it('should not typecast', function() {
+                expect(Mutil.without(arr, '1')).toEqual([1,2,3]);
+            });
+        });
+
         describe('map', function() {
             it('should return empty array for empty input', function() {
                 expect(Mutil.map([], function() {})).toEqual([]);

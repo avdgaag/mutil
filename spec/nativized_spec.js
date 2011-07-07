@@ -94,6 +94,28 @@ describe('Mutil', function() {
             obj = { 'a': 1, 'b': 2, 'c': 3 };
         });
 
+        describe('without', function() {
+            beforeEach(function() {
+                arr = [1, 2, 3];
+            });
+
+            it('should return input array when no arguments given', function() {
+                expect(arr.without()).toEqual(arr);
+            });
+
+            it('should remove a single element', function() {
+                expect(arr.without(2)).toEqual([1,3]);
+            });
+
+            it('should remove multiple elements', function() {
+                expect(arr.without(2, 3)).toEqual([1]);
+            });
+
+            it('should not typecast', function() {
+                expect(arr.without('1')).toEqual([1,2,3]);
+            });
+        });
+
         describe('forEach', function() {
             it('should loop over all elements', function() {
                 var i = 0;
