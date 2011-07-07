@@ -202,6 +202,57 @@ describe('Mutil', function() {
                 expect(Mutil.format(template, vars)).toEqual('Hello, world!');
             });
         });
+
+        describe('toElement', function() {
+            it('should throw type error on bad input string', function() {
+                expect(function() {
+                    Mutil.toElement('$$$');
+                }).toThrow();
+            });
+
+            it('should parse a simple element', function() {
+                var p = Mutil.toElement('p');
+                expect(p.nodeType).toEqual(1);
+                expect(p.tagName.toLowerCase()).toEqual('p');
+            });
+
+            it('should parse text content', function() {
+                var p = Mutil.toElement('p{foo bar}');
+                expect(p.nodeType).toEqual(1);
+                expect(p.tagName.toLowerCase()).toEqual('p');
+                expect(p.innerHTML).toEqual('foo bar');
+            });
+
+            it('should parse an ID', function() {
+                var p = Mutil.toElement('p#foo');
+                expect(p.nodeType).toEqual(1);
+                expect(p.tagName.toLowerCase()).toEqual('p');
+                expect(p.getAttribute('id')).toEqual('foo');
+            });
+
+            it('should parse a single class name', function() {
+                var p = Mutil.toElement('p.foo');
+                expect(p.nodeType).toEqual(1);
+                expect(p.tagName.toLowerCase()).toEqual('p');
+                expect(p.className).toEqual('foo');
+            });
+
+            it('should parse multiple classes', function() {
+                var p = Mutil.toElement('p.foo.bar');
+                expect(p.nodeType).toEqual(1);
+                expect(p.tagName.toLowerCase()).toEqual('p');
+                expect(p.className).toEqual('foo bar');
+            });
+
+            it('should parse everything in one go', function() {
+                var p = Mutil.toElement('p#foo.bar.baz{qux}');
+                expect(p.nodeType).toEqual(1);
+                expect(p.tagName.toLowerCase()).toEqual('p');
+                expect(p.className).toEqual('bar baz');
+                expect(p.innerHTML).toEqual('qux');
+                expect(p.getAttribute('id')).toEqual('foo');
+            });
+        });
     });
 
     describe('Array functions', function() {

@@ -444,6 +444,29 @@
             return template;
         },
 
+        // Parse a string representation of a DOM element into an
+        // actual element. It follows a special format:
+        //
+        //     [tag name][#id][.class1.class2][{Element content}]
+        //
+        // Example:
+        //
+        //     Mutil.toElement('p#main.leader{Welcome}')
+        //     // => <p id="main" class="leader">Welcome</p>
+        //
+        toElement: function(str) {
+            var id      = str.match(/#([a-zA-Z\-_0-9]+)/),
+                classes = str.match(/\.([^#\s{}]+)/),
+                content = str.match(/\{([^}]+)\}/),
+                el_name = str.match(/^([a-zA-Z]+)/);
+            if(!el_name) throw new TypeError();
+            return this.tap(document.createElement(el_name[1]), function(e) {
+                if(id)      e.setAttribute('id', id[1]);
+                if(classes) e.className = classes[1].replace('.', ' ');
+                if(content) e.appendChild(document.createTextNode(content[1]));
+            });
+        },
+
         // ## Object/generic functions
 
         // 'Tap' into an object, first passing it to a callback function and then
