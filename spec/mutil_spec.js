@@ -161,6 +161,66 @@ describe('Mutil', function() {
                 expect(obj.foo).toEqual('oof');
             });
         });
+
+		describe('inherits', function() {
+			var Child, Parent;
+
+			beforeEach(function() {
+				Parent = (function() {
+					function Parent() { }
+					Parent.description = 'A class';
+					Parent.prototype.greeting = 'Hello';
+					Parent.prototype.greet = function() {
+						return this.greeting;
+					};
+					Parent.prototype.foo = function() {
+						return 'foo';
+					};
+					return Parent;
+				})();
+				Child = (function() {
+					Mutil.inherits(Child, Parent);
+					function Child(name) {
+						this.name = name;
+					}
+					Child.prototype.shout = function() {
+						return this.greeting + '  ' + this.name + '!';
+					};
+					Child.prototype.foo = function() {
+						return this.constructor._super.foo() + 'bar';
+					};
+					return Child;
+				})();
+			});
+
+			it('should copy class properties', function() {
+				expect(Child.description).toEqual('A class');
+			});
+
+			it('should set constructor', function() {
+				c = new Child;
+				expect(c instanceof Child).toBeTruthy();
+				expect(c instanceof Parent).toBeTruthy();
+			});
+
+			it('should chain prototype', function() {
+				c = new Child;
+				expect(c.greet()).toEqual('Hello');
+			});
+
+			it('should provide super property', function() {
+				c = new Child;
+				expect(c.foo()).toEqual('foobar');
+			});
+
+			it('should not share prototype properties', function() {
+				c = new Child;
+				p = new Parent;
+				Child.prototype.greeting = 'Hi';
+				expect(c.greeting).toEqual('Hi');
+				expect(p.greeting).toEqual('Hello');
+			});
+		});
     });
 
     describe('Function functions', function() {

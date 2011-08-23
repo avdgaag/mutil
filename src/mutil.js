@@ -591,6 +591,53 @@
             });
         },
 
+        // Set up a kind of inheritance chain as seen in traditional class-based
+        // object-oriented languages.
+        //
+        // This does a couple a things:
+        //
+        // * Copy all attributes from parent to child
+        // * Create a new ghost class with the parent as prototype
+        // * Set the prototype to a new ghost class instance
+        // * Add a _super property to child to access the parent
+        //
+        // Example:
+        //
+        //    var ParentClass = (function() {
+        //      function ParentClass() {
+        //        this.message = 'hello';
+        //      }
+        //      ParentClass.prototype.speak = function() {
+        //        return this.message;
+        //      };
+        //      return ParentClass;
+        //    })();
+        //    var ChildClass = (function() {
+        //      Mutil.inherits(ParentClass);
+        //      function ChildClass() {
+        //        this.name = 'John';
+        //        this._super.constructor.apply(arguments);
+        //      }
+        //      ChildClass.prototype.shout = function() {
+        //        return this.message + ' ' + this.name + '!';
+        //      };
+        //      return ChildClass;
+        //    })();
+        //    p = new ParentClass();
+        //    p.speak() # => 'hello'
+        //    c = new ChildClass();
+        //    c.speak() # => 'hello'
+        //    c.shout() # => 'hello john!'
+        //    
+        inherits: function(child, parent) {
+            for(var k in parent) if(parent.hasOwnProperty(k)) child[k] = parent[k];
+            function F() { this.constructor = child; }
+            F.prototype     = parent.prototype;
+            child.prototype = new F;
+            child._super    = parent.prototype;
+            return child;
+        },
+
         // ## Function functions
 
         // Force a function to be executed in a specific context, useful when
